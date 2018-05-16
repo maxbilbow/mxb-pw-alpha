@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow } = require('electron');
 
 let win;
 
@@ -9,10 +9,10 @@ function createWindow () {
     height: 600,
     backgroundColor: '#ffffff',
     icon: `file://${__dirname}/dist/assets/logo.png`
-  })
+  });
 
 
-  win.loadURL(`file://${__dirname}/dist/mxb-pw-alpha/index.html`)
+  win.loadURL(`file://${__dirname}/dist/mxb-pw-alpha/index.html`);
 
   //// uncomment below to open the DevTools.
   // win.webContents.openDevTools()
@@ -20,11 +20,11 @@ function createWindow () {
   // Event when the window is closed.
   win.on('closed', function () {
     win = null
-  })
+  });
 }
 
 // Create window on electron intialization
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -33,7 +33,7 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit()
   }
-})
+});
 
 app.on('activate', function () {
   // macOS specific close process
