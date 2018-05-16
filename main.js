@@ -40,4 +40,22 @@ app.on('activate', function () {
   if (win === null) {
     createWindow()
   }
-})
+});
+
+
+console.log("STUFF");
+
+const {SharedThing} = require(`${__dirname}/dist/mxb-pw-alpha/main`);
+
+let value;
+
+
+(function rpt() {
+  if (value !== SharedThing.value) {
+    value = SharedThing.value;
+    console.log(`SharedThing.value === ${value}`);
+  }
+  setTimeout(rpt, 1000);
+}());
+
+SharedThing.value = "POO";

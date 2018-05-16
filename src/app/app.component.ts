@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import SharedThing from "src/shared/SharedThing";
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,8 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent {
 
-  max     = 1;
-  current = 0;
+  max     = 1000;
+  get current() {
+    return SharedThing.value;
+  }
+
+  set current(value) {
+    SharedThing.value = value;
+  }
 
   /// Start the timer
   start() {
