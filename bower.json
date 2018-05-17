@@ -1,0 +1,22 @@
+{
+  "name": "mxw-pw-alpha",
+  "description": "AngularJS version",
+  "main": "main.js",
+  "authors": [
+    "Max Bilbow"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/maxbilbow/mxw-pw-alpha",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^v1.7.0",
+    "angular-material": "^v1.1.9"
+  }
+}

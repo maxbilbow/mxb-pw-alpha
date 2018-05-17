@@ -5,17 +5,17 @@ let win;
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 600,
-    height: 600,
-    backgroundColor: '#ffffff',
-    icon: `file://${__dirname}/dist/assets/logo.png`
+      width: 600,
+      height: 600,
+      backgroundColor: '#ffffff',
+      toolbar: false
   });
 
 
-  win.loadURL(`file://${__dirname}/dist/mxb-pw-alpha/index.html`);
+  win.loadURL(`file://${__dirname}/index.html`);
 
   //// uncomment below to open the DevTools.
-  // win.webContents.openDevTools()
+  win.webContents.openDevTools()
 
   // Event when the window is closed.
   win.on('closed', function () {
@@ -41,21 +41,3 @@ app.on('activate', function () {
     createWindow()
   }
 });
-
-
-console.log("STUFF");
-
-const {SharedThing} = require(`${__dirname}/dist/mxb-pw-alpha/main`);
-
-let value;
-
-
-(function rpt() {
-  if (value !== SharedThing.value) {
-    value = SharedThing.value;
-    console.log(`SharedThing.value === ${value}`);
-  }
-  setTimeout(rpt, 1000);
-}());
-
-SharedThing.value = "POO";
