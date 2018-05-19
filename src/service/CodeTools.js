@@ -17,54 +17,50 @@ class CodeTools {
     }
 
     static getCaretPosition(element) {
-        function isChildOf(node, parentId) {
+        function isChildOf(node, parent) {
             while (node !== null) {
-                if (node/*.id*/ === parentId) {
+                if (node === parent) {
                     return true;
                 }
                 node = node.parentNode;
             }
-
             return false;
         }
 
-        function getCurrentCursorPosition(parentId) {
-            var selection = window.getSelection(),
-                charCount = -1,
-                node;
 
-            if (selection.focusNode) {
-                if (isChildOf(selection.focusNode, parentId)) {
-                    node = selection.focusNode;
-                    charCount = selection.focusOffset;
+        let selection = window.getSelection(),
+            charCount = -1,
+            node;
 
-                    while (node) {
-                        if (node/*.id*/ === parentId) {
-                            break;
-                        }
+        if (selection.focusNode) {
+            if (isChildOf(selection.focusNode, element)) {
+                node = selection.focusNode;
+                charCount = selection.focusOffset;
 
-                        if (node.previousSibling) {
-                            node = node.previousSibling;
-                            charCount += node.textContent.length;
-                        } else {
-                            node = node.parentNode;
-                            if (node === null) {
-                                break
-                            }
+                while (node) {
+                    if (node === element) {
+                        break;
+                    }
+
+                    if (node.previousSibling) {
+                        node = node.previousSibling;
+                        charCount += node.textContent.length;
+                    } else {
+                        node = node.parentNode;
+                        if (node === null) {
+                            break
                         }
                     }
                 }
             }
-
-            return charCount;
         }
 
-        return getCurrentCursorPosition(element)
+        return charCount;
     }
 
     static setCaretPosition(element, position) {
         if (!position || !element.innerText) return;
-
+        console.log("SETTING CARET POSITION TO:", position);
         function createRange(node, chars, range) {
             if (!range) {
                 range = document.createRange();
@@ -72,6 +68,9 @@ class CodeTools {
                 range.setStart(node, 0);
             }
 
+            if (node.localName === "br") {
+                console.log("br");
+            }
             if (chars.count === 0) {
                 range.setEnd(node, chars.count);
             } else if (node && chars.count > 0) {
@@ -109,10 +108,18 @@ class CodeTools {
 
     }
 
-    static updateCodeElement(element, newCode) {
+    static updateCodeElement(element, oldCode) {
+        const newCode = element.innerText;
+        if (oldCode && oldCode.trim() === newCode.trim()) {
+            return false;
+        }
         const caretPosition = this.getCaretPosition(element);
-        element.innerHTML = CodeTools.highlight(newCode);
+        element.innerHTML = CodeTools.highlight(newCode).replace(/\n/g,"<br/>");
         this.setCaretPosition(element, caretPosition);
+        return true;
+    }
+
+    static onKeyPress(event) {
 
     }
 }

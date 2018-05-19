@@ -37,20 +37,23 @@ class CodeEditor extends Component {
 
     reHighlight() {
         const element = this.getCodeElement();
-        const newCode = element.innerText.trim();
-        if ( this.state.code !== newCode) {
 
-            this.state.code = newCode;
-            // this.setState(this.state);
-            CodeTools.updateCodeElement(element, newCode);
+        if (CodeTools.updateCodeElement(element, this.state.code)) {
+            this.state.code = element.innerText;
+            console.log("Code was updated");
+        }
+        else  {
+            console.log("Code NOT updated yet");
         }
     }
 
     render() {
         return (
-            <pre className={"language-"+CodeTools.getLanguage(this.props.code)} onKeyUp={this.reHighlight.bind(this)}
+            <pre className={"language-"+CodeTools.getLanguage(this.props.code)}
+                 onKeyUp={this.reHighlight.bind(this)}
+                 onKeyPress={CodeTools.onKeyPress}
                  contentEditable={this.state.editable}
-            ></pre>
+            >{""}</pre>
         );
     }
 }
