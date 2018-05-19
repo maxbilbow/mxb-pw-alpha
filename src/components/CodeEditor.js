@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import ReactDOM  from 'react-dom';
 
-import Prism from "prismjs";
+import CodeTools from "../service/CodeTools";
+
 import "prismjs/themes/prism-tomorrow.css";
+
 class CodeEditor extends Component {
 
     state = {
@@ -25,28 +28,29 @@ class CodeEditor extends Component {
     componentDidMount(...args) {
         console.log("componentDidMount", args);
         this.setState(this.props);
+        this.getCodeElement().innerHTML = CodeTools.highlight(this.props.code);
     }
 
-    getLanguage() {
-        const firstChar = this.state.code.trim();
-        if (firstChar.length && firstChar !== "{" && firstChar !== "[") {
-            return "javascript";
-        }
-        else {
-            return "json";
-        }
+    getCodeElement() {
+        return ReactDOM.findDOMNode(this);//.childNodes.values().next().value;
     }
 
     reHighlight() {
-        console.log("reHighlight", this.state.code);
-        // Prism.highlightElement(this.editor);
+        const element = this.getCodeElement();
+        const newCode = element.innerText.trim();
+        if ( this.state.code !== newCode) {
+
+            this.state.code = newCode;
+            // this.setState(this.state);
+            CodeTools.updateCodeElement(element, newCode);
+        }
     }
+
     render() {
         return (
-            <pre ref={this.editor} className={"language-" + this.getLanguage()}><code
-                onKeyUp={this.reHighlight()}
-                contentEditable={this.state.editable}
-            >{this.state.code}</code></pre>
+            <pre className={"language-"+CodeTools.getLanguage(this.props.code)} onKeyUp={this.reHighlight.bind(this)}
+                 contentEditable={this.state.editable}
+            ></pre>
         );
     }
 }
