@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import ReactDOM  from 'react-dom';
 
-import CodeTools from "../service/CodeTools";
+import 'react-dom';
+import 'brace';
+import AceEditor from 'react-ace';
 
-import "prismjs/themes/prism-tomorrow.css";
+import 'brace/mode/javascript';
+import 'brace/mode/json';
+import 'brace/theme/tomorrow_night';
 
 class CodeEditor extends Component {
 
     state = {
-        code: "",
+        language: "javascript",
+        code:"",
         editable: true
     };
 
@@ -17,50 +21,58 @@ class CodeEditor extends Component {
         this.editor = React.createRef();
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        console.log("componentWillUpdate", nextProps, nextState);
-    }
-
-    componentDidUpdate(nextProps, nextState) {
-        console.log("componentDidUpdate", nextProps, nextState);
-    }
-
-    componentDidMount(...args) {
-        console.log("componentDidMount", args);
-        this.setState(this.props);
-        this.getCodeElement().innerHTML = CodeTools.highlight(this.props.code);
-    }
-
-    getCodeElement() {
-        return ReactDOM.findDOMNode(this);//.childNodes.values().next().value;
-    }
-
-    reHighlight() {
-        const element = this.getCodeElement();
-
-        if (CodeTools.updateCodeElement(element, this.state.code)) {
-            this.state.code = element.innerText;
-            console.log("Code was updated");
+    onChange(newValue) {
+        this.state.code = newValue;
+        if (newValue && newValue.trim().length) {
+            const lang = CodeEditor.guessLanguage(newValue);
+            if (lang && lang !== this.state.language) {
+                this.state.language = lang;
+                this.setState(this.state);
+            }
         }
-        else  {
-            console.log("Code NOT updated yet");
+    }
+
+    static guessLanguage(code) {
+        if (!(code && code.length)) return null;
+        const firstChar = code.trim().charAt(0);
+        if (firstChar !== "{" && firstChar !== "[") {
+            return "javascript";
+        }
+        else {
+            return "json";
         }
     }
 
     render() {
+
         return (
-            <pre className={"language-"+CodeTools.getLanguage(this.props.code)}
-                 onKeyUp={this.reHighlight.bind(this)}
-                 onKeyPress={CodeTools.onKeyPress}
-                 contentEditable={this.state.editable}
-            >{""}</pre>
-        );
+            <div>{this.state.language}
+            <AceEditor
+                mode={this.state.language}
+                theme="tomorrow_night"
+                onChange={this.onChange.bind(this)}
+                name="UNIQUE_ID_OF_DIV"
+                editorProps={{$blockScrolling: true}}
+                fontSize={18}
+                value={this.state.code}
+                width={"100%"}
+                setOptions={{
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true,
+                    enableSnippets: false,
+                    showLineNumbers: true,
+                    tabSize: 2
+                }}
+            /></div>
+        )
+
     }
 }
 
 CodeEditor.defaultProps = {
-    code: "const thing = Math.rand(100);",
-    editable: true
+    language: "javascript",
+    editable: true,
+    code: ""
 };
 
 export default CodeEditor;
