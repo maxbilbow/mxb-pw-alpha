@@ -1,5 +1,7 @@
 import React from "react"
 
+import $interval from "../service/MxTimeout"
+
 class Clock extends React.Component {
     constructor(props) {
         super(props);
@@ -7,19 +9,19 @@ class Clock extends React.Component {
     }
 
     componentDidMount() {
-        this.timerID = setInterval(
+        this.timerID = $interval(
             () => this.tick(),
             1000
         );
     }
 
     componentWillUnmount() {
-        clearInterval(this.timerID);
+// eslint-disable-next-line no-undef
+        $interval.cancel(this.timerID);
     }
 
     tick() {
-        this.state.date = new Date();
-        this.setState(this.state);
+        this.setState({date: new Date()});
     }
 
     render() {

@@ -22,12 +22,10 @@ class CodeEditor extends Component {
     }
 
     onChange(newValue) {
-        this.state.code = newValue;
         if (newValue && newValue.trim().length) {
             const lang = CodeEditor.guessLanguage(newValue);
             if (lang && lang !== this.state.language) {
-                this.state.language = lang;
-                this.setState(this.state);
+                this.setState({language: lang, code: newValue});
             }
         }
     }

@@ -1,6 +1,7 @@
 
 const Messages = Object.freeze({
-    FILE_WAS_OPENED: "file_open"
+    FILE_OPEN: "file_open",
+    XML_WAS_GENERATED: "XML_WAS_GENERATED"
 });
 
-export default Messages;
+module.exports = Messages;

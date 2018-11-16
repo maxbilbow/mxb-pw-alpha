@@ -4,7 +4,6 @@ import './App.css';
 
 import CodeEditor from "./components/CodeEditor";
 import Clock from "./components/Clock";
-
 class App extends Component {
     state = {
         welcome: 1
